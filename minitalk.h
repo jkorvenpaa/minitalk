@@ -6,7 +6,7 @@
 /*   By: jkorvenp <jkorvenp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:18:22 by jkorvenp          #+#    #+#             */
-/*   Updated: 2025/08/06 19:08:16 by jkorvenp         ###   ########.fr       */
+/*   Updated: 2025/08/07 13:06:46 by jkorvenp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <stdlib.h>
 
 #endif
+
