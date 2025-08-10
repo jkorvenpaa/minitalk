@@ -6,7 +6,7 @@
 /*   By: jkorvenp <jkorvenp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 14:54:38 by jkorvenp          #+#    #+#             */
-/*   Updated: 2025/08/09 19:34:42 by jkorvenp         ###   ########.fr       */
+/*   Updated: 2025/08/10 20:02:29 by jkorvenp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,44 @@ for bit off = 0, or fail signal
 
 #include "minitalk.h"
 
-pid_t	g_server_pid;
+//volatile sig_atomic_t	g_note;
+
+t_state_client	g_client;
+
+void	client_timeout(void)
+{
+	int	time;
+	
+	time = 0;
+	while (g_client.received == 0)
+	{
+		usleep(100);
+		time++;
+		if (time > 1000)
+		{
+			time = 0;
+			ft_printf("timeout\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
 
 void	send_bits(char c)
 {
 	int	j;
 	int	bit;
+	
 
 	j = 7;
 	while (j >= 0)
 	{
 		bit = (c >> j) & 1;
 		if (bit == 1)
-			kill(g_server_pid, SIGUSR1);
+			kill(g_client.server_pid, SIGUSR1);
 		else
-			kill(g_server_pid, SIGUSR2);
-		usleep(300);
+			kill(g_client.server_pid, SIGUSR2);
+		client_timeout();
+		g_client.received = 0;
 		j--;
 	}
 }
@@ -61,32 +83,29 @@ void	encrypt_message(char *message)
 
 void	signal_handler(int sig, siginfo_t *info, void *context)
 {
-	(void) context;
-	if (info->si_pid != g_server_pid)
-		return ;
+	(void)context;
+	if (g_client. server_pid != info->si_pid)
+		exit(EXIT_FAILURE);
 	if (sig == SIGUSR1)
 	{
 		ft_printf("message completed\n");
-		exit (EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
 	if (sig == SIGUSR2)
-	{
-		ft_printf("message failed\n");
-		exit (EXIT_FAILURE);
-	}
+		g_client.received = 1;   
 }
 
 int	main(int argc, char **argv)
 {
 	struct sigaction	action;
-
+	
 	if (argc != 3)
 	{
 		ft_printf("invalid arguments\n");
 		return (1);
 	}
-	g_server_pid = ft_atoi(argv[1]);
-	if (g_server_pid < 0)
+	g_client.server_pid = ft_atoi(argv[1]);
+	if (g_client.server_pid < 0)
 	{
 		ft_printf("invalid pid\n");
 		return (1);
