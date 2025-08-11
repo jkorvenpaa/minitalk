@@ -6,7 +6,7 @@
 /*   By: jkorvenp <jkorvenp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:18:22 by jkorvenp          #+#    #+#             */
-/*   Updated: 2025/08/11 11:33:47 by jkorvenp         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:50:42 by jkorvenp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "libft/get_next_line.h"
 # include "libft/ft_printf.h"
 # include <signal.h>
-# include <unistd.h>
 # include <sys/types.h>
 # include <stdlib.h>
 
