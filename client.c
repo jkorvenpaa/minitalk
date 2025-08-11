@@ -6,7 +6,7 @@
 /*   By: jkorvenp <jkorvenp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 14:54:38 by jkorvenp          #+#    #+#             */
-/*   Updated: 2025/08/10 20:02:29 by jkorvenp         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:40:06 by jkorvenp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,20 @@ client takes two parameters/arguments, The PID of the server and message.
 Encrypts and sends the message by bits
 \0 char as a stop condition for server to know when the message is finnished
 
-for bit on = 1, or success-signal
+for bit on = 1, or message success-signal
 	kill(pid, SIGUSR1);
-for bit off = 0, or fail signal
+for bit off = 0, or bit success signal
 	kill(pid, SIGUSR2);
 */
 
 #include "minitalk.h"
-
-//volatile sig_atomic_t	g_note;
 
 t_state_client	g_client;
 
 void	client_timeout(void)
 {
 	int	time;
-	
+
 	time = 0;
 	while (g_client.received == 0)
 	{
@@ -49,7 +47,6 @@ void	send_bits(char c)
 {
 	int	j;
 	int	bit;
-	
 
 	j = 7;
 	while (j >= 0)
@@ -84,7 +81,7 @@ void	encrypt_message(char *message)
 void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)context;
-	if (g_client. server_pid != info->si_pid)
+	if (g_client.server_pid != info->si_pid)
 		exit(EXIT_FAILURE);
 	if (sig == SIGUSR1)
 	{
@@ -92,20 +89,20 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 		exit(EXIT_SUCCESS);
 	}
 	if (sig == SIGUSR2)
-		g_client.received = 1;   
+		g_client.received = 1;
 }
 
 int	main(int argc, char **argv)
 {
 	struct sigaction	action;
-	
+
 	if (argc != 3)
 	{
 		ft_printf("invalid arguments\n");
 		return (1);
 	}
 	g_client.server_pid = ft_atoi(argv[1]);
-	if (g_client.server_pid < 0)
+	if (g_client.server_pid <= 0 || g_client.server_pid > 9999999)
 	{
 		ft_printf("invalid pid\n");
 		return (1);

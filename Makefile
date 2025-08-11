@@ -3,7 +3,7 @@ SERVER = server
 COMPILER = cc
 CFLAGS = -Wall -Wextra -Werror -g
 CLIENT_SRCS = client.c
-SERVER_SRCS = server.c utils.c
+SERVER_SRCS = server.c
 	
 CLIENT_OBJS = $(CLIENT_SRCS:%.c=%.o)
 SERVER_OBJS = $(SERVER_SRCS:%.c=%.o)
