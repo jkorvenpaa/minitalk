@@ -19,5 +19,5 @@ Use `Makefile` to build both executables:
 
 ```zsh
 make                              # Build both, client and server
-./server                          # Start server to display PID and wait for a client signals
+./server                          # Start server to display PID and wait for a client
 ./client PID "string to send"     # Start client with two additional arguments, server´s PID and a string
